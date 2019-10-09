@@ -1,0 +1,32 @@
+dist: bionic
+sudo: required
+services:
+  - docker
+language: bash
+env:
+  - IMAGE_NAME=12306_code_server
+
+
+install:
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - chmod +x qemu/qemu-aarch64-static && chmod +x qemu/qemu-arm-static
+
+script:
+  - |
+    # A list of default architectures that will be built
+    IMAGE_ARCH="amd64 arm32v7 arm64v8"
+    COMMIT_SHA=$(git log -1 --pretty=format:"%H" | awk '{print substr($1,1,9)}')
+
+    for THIS_ARCH in ${IMAGE_ARCH}; do
+      # Build image
+      docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH \
+      -f docker/$THIS_ARCH-Dockerfile .
+      # Tag image :{arch} and :{arch}-{commit sha}
+      docker tag $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH-$COMMIT_SHA
+      if [ "$THIS_ARCH" = "amd64" ]; then
+        # Tag as latest for amd64 images
+        docker tag $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH $DOCKER_USERNAME/$IMAGE_NAME:latest
+      fi
+    done
+  - docker push $DOCKER_USERNAME/$IMAGE_NAME

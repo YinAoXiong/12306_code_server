@@ -1,0 +1,24 @@
+ARG THIS_ARCH=arm64v8
+ARG ALT_ARCH=aarch64
+
+FROM arm64v8/python:3.7-buster
+
+WORKDIR /app
+
+COPY . .
+COPY qemu/qemu-aarch64-static /usr/bin/qemu-aarch64-static
+
+RUN set -ex && \
+                apt-get update && \
+                apt-get install -y build-essential python3-dev libhdf5-dev \
+                gfortran libopenblas-dev liblapack-dev && \
+                pip install --no-cache-dir cython && \
+                rm -rf /var/lib/apt/lists/* && \
+                pip install --no-cache-dir https://github.com/lhelontra/tensorflow-on-arm/releases/download/v1.14.0-buster/tensorflow-1.14.0-cp37-none-linux_aarch64.whl && \
+                pip install --no-cache-dir -r requirements.txt && \
+                bash download_model.sh
+
+# 服务运行在80端口
+EXPOSE 80
+
+CMD ["gunicorn", "app:app", "-c", "gunicorn.conf.py"]

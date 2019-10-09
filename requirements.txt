@@ -1,6 +1,5 @@
 flask==1.1.1
 pillow==6.2.0
 keras==2.2.4
-tensorflow==1.14.0
 gunicorn==19.9.0
 gevent==1.4.0

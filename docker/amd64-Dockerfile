@@ -1,0 +1,15 @@
+FROM python:3.7-buster
+
+WORKDIR /app
+
+COPY . .
+
+RUN set -ex && \
+                pip install --no-cache-dir tensorflow==1.14.0 && \
+                pip install --no-cache-dir -r requirements.txt && \
+                bash download_model.sh
+
+# 服务运行在80端口
+EXPOSE 80
+
+CMD ["gunicorn", "app:app", "-c", "gunicorn.conf.py"]
