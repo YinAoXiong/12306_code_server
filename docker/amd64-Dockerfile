@@ -1,13 +1,13 @@
-FROM python:3.7-buster
+FROM yinaoxiong/12306_code_server:amd64-env
+
+LABEL maintainer="Yin Aoxiong <yinaoxiong@gmail.com>" \
+      reference="https://github.com/yinaoxiong/12306_code_server"
 
 WORKDIR /app
 
 COPY . .
 
-RUN set -ex && \
-                pip install --no-cache-dir tensorflow==1.14.0 && \
-                pip install --no-cache-dir -r requirements.txt && \
-                bash download_model.sh
+RUN set -ex && bash download_model.sh
 
 # 服务运行在80端口
 EXPOSE 80
