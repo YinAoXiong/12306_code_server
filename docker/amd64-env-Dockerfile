@@ -1,4 +1,4 @@
-FROM python:3.7-buster
+FROM python:3.7-slim-buster
 
 LABEL maintainer="Yin Aoxiong <yinaoxiong@gmail.com>" \
       reference="https://github.com/yinaoxiong/12306_code_server"
@@ -8,5 +8,8 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 
 RUN set -ex && \
+                apt-get update && \
+                apt-get install -y wget && \
+                rm -rf /var/lib/apt/lists/* && \
                 pip install --no-cache-dir tensorflow==1.14.0 && \
                 pip install --no-cache-dir -r requirements.txt

@@ -1,4 +1,4 @@
-FROM arm64v8/python:3.7-buster
+FROM arm64v8/python:3.7-slim-buster
 
 LABEL maintainer="Yin Aoxiong <yinaoxiong@gmail.com>" \
       reference="https://github.com/yinaoxiong/12306_code_server"
@@ -9,10 +9,9 @@ COPY qemu/qemu-aarch64-static /usr/bin/qemu-aarch64-static
 COPY requirements.txt requirements.txt
 
 RUN set -ex && \
-                apt-get update && \
-                apt-get install -y build-essential python3-dev libhdf5-dev \
-                gfortran libopenblas-dev liblapack-dev && \
-                pip install --no-cache-dir cython && \
-                rm -rf /var/lib/apt/lists/* && \
-                pip install --no-cache-dir https://github.com/lhelontra/tensorflow-on-arm/releases/download/v1.14.0-buster/tensorflow-1.14.0-cp37-none-linux_aarch64.whl && \
-                pip install --no-cache-dir -r requirements.txt
+            apt-get update && \
+            apt-get install -y build-essential libhdf5-dev gfortran libopenblas-dev pkg-config wget && \
+            rm -rf /var/lib/apt/lists/* && \
+            pip install --no-cache-dir Cython && \
+            pip install --no-cache-dir https://github.com/lhelontra/tensorflow-on-arm/releases/download/v1.14.0-buster/tensorflow-1.14.0-cp37-none-linux_aarch64.whl && \
+            pip install --no-cache-dir -r requirements.txt
