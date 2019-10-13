@@ -12,7 +12,7 @@ app = flask.Flask(__name__)
 textModel = None
 imgModel = None
 
-
+@app.before_first_request
 def load_model():
     '''
     加载模型函数
@@ -123,5 +123,4 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    load_model()
     app.run()
