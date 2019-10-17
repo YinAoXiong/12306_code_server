@@ -17,15 +17,12 @@ script:
     # A list of default architectures that will be built
     IMAGE_ARCH="amd64 arm32v7 arm64v8"
     COMMIT_SHA=$(git log -1 --pretty=format:"%H")
-    LATEST_TAG_SHA=git rev-list --tags --max-count=1
-    SHOW_COMMIT_SHA=${COMMIT_SHA:0:9}
+    LATEST_TAG_SHA=$(git rev-list --tags --max-count=1)
 
     for THIS_ARCH in ${IMAGE_ARCH}; do
       # Build image
       docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH \
       -f docker/$THIS_ARCH-Dockerfile .
-      # Tag image :{arch} and :{arch}-{commit sha}
-      docker tag $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH-$SHOW_COMMIT_SHA
       if [ $COMMIT_SHA == $LATEST_TAG_SHA ]; then
         docker tag $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH-$(git describe --abbrev=0 --tags)
       fi
