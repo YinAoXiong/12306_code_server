@@ -4,7 +4,7 @@
 
 该项目用于构建自托管的12306验证码识别服务器，本项目的全部模型和部分代码来自于此项目 [easy12306](https://github.com/zhaipro/easy12306)，使用该项目构建的api符合 [12306购票小助手](https://github.com/testerSunshine/12306)云打码格式可以直接调用。
 
-提供一个部署好的线上版本, [https://12306.yinaoxiong.cn](https://12306.yinaoxiong.cn/),通过内网穿透部署在斐讯N1上不保证可用性,服务状态可以通过 [https://stats.uptimerobot.com/oyKyLhjJQ/783635180](https://stats.uptimerobot.com/oyKyLhjJQ/783635180)查看.
+提供一个部署好的线上版本, [https://12306.yinaoxiong.cn](https://12306.yinaoxiong.cn/),部署在腾讯云1核1G的学生机上不保证可用性,服务状态可以通过 [https://stats.uptimerobot.com/oyKyLhjJQ/783635180](https://stats.uptimerobot.com/oyKyLhjJQ/783635180)查看.
 
 
 
@@ -90,7 +90,7 @@ services:
     image: yinaoxiong/12306_code_server:amd64 #根据需要修改image
     ports:
       - 5002:80 #可以根据需要修改端口
-     environment:
+    environment:
       - WORKERS=1 #gunicorn works 默认为1可以根据服务器配置自行调整
     restart: always
   
