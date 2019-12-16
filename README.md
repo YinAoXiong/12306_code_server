@@ -112,7 +112,14 @@ services:
    pip3 install -r requirements.txt
    ```
 
-3. 运行
+3. 下载模型文件
+
+    ```shell
+    wget -c https://github.com/YinAoXiong/12306_code_server/releases/download/v0.1-alpha/12306.image.model.h5
+    wget -c https://github.com/YinAoXiong/12306_code_server/releases/download/v0.1-alpha/model.v2.0.h5
+    ```
+
+4. 运行
 
    ```shell
    gunicorn app:app -c gunicorn.conf.py
