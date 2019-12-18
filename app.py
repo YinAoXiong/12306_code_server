@@ -4,13 +4,14 @@ import base64
 import flask
 import numpy as np
 from PIL import Image
-from keras import models
 from verify import pretreatment
+import tflite_runtime.interpreter as tflite
 
 app = flask.Flask(__name__)
 # 模型的全局变量
 textModel = None
 imgModel = None
+
 
 @app.before_first_request
 def load_model():
@@ -20,10 +21,21 @@ def load_model():
     '''
     global textModel
     global imgModel
-    textModel = models.load_model('model.v2.0.h5')
-    textModel._make_predict_function()
-    imgModel = models.load_model('12306.image.model.h5')
-    imgModel._make_predict_function()
+    textModel = tflite.Interpreter(
+        'text.model.tflite')
+    textModel.allocate_tensors()
+    imgModel = tflite.Interpreter(
+        'image.model.tflite')
+    imgModel.allocate_tensors()
+
+
+def predict(model, input):
+    input_details = model.get_input_details()
+    output_details = model.get_output_details()
+    model.set_tensor(input_details[0]['index'], np.float32(input))
+    model.invoke()
+    result = model.get_tensor(output_details[0]['index'])
+    return result
 
 
 def base64_to_image(base64_code):
@@ -66,7 +78,7 @@ def preprocess_input(x):
 
 
 @app.route('/verify/base64/', methods=['POST'])
-def predict():
+def predict_verify():
     verify_titles = ['打字机', '调色板', '跑步机', '毛线', '老虎', '安全帽', '沙包', '盘子', '本子', '药片', '双面胶', '龙舟', '红酒', '拖把', '卷尺',
                      '海苔', '红豆', '黑板', '热水袋', '烛台', '钟表', '路灯', '沙拉', '海报', '公交卡', '樱桃', '创可贴', '牌坊', '苍蝇拍', '高压锅',
                      '电线', '网球拍', '海鸥', '风铃', '订书机', '冰箱', '话梅', '排风机', '锅铲', '绿豆', '航母', '电子秤', '红枣', '金字塔', '鞭炮',
@@ -83,7 +95,7 @@ def predict():
         imgs = np.array(list(pretreatment._get_imgs(img)))
         imgs = preprocess_input(imgs)
         text_list = []
-        label = textModel.predict(text)
+        label = predict(textModel, text)
         label = label.argmax()
         text = verify_titles[label]
         text_list.append(text)
@@ -97,13 +109,13 @@ def predict():
             offset = 60
         text = get_text(img, offset=offset)
         if text.mean() < 0.95:
-            label = textModel.predict(text)
+            label = predict(textModel, text)
             label = label.argmax()
             text = verify_titles[label]
             text_list.append(text)
 
         print(f"题目为{text_list}")
-        labels = imgModel.predict(imgs)
+        labels = predict(imgModel, imgs)
         labels = labels.argmax(axis=1)
         results = []
         for pos, label in enumerate(labels):

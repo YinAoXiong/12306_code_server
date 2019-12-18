@@ -6,12 +6,14 @@ LABEL maintainer="Yin Aoxiong <yinaoxiong@gmail.com>" \
 WORKDIR /app
 
 COPY qemu/qemu-aarch64-static /usr/bin/qemu-aarch64-static
-COPY requirements.txt requirements.txt
+COPY arm64v8-requirements.txt requirements.txt
 
 RUN set -ex && \
             apt-get update && \
-            apt-get install -y build-essential libhdf5-dev gfortran libopenblas-dev pkg-config wget && \
+            apt-get install -y build-essential gfortran libopenblas-dev pkg-config wget \
+            libtiff5-dev libjpeg-dev libopenjp2-7-dev zlib1g-dev \
+            libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk \
+            libharfbuzz-dev libfribidi-dev && \
             rm -rf /var/lib/apt/lists/* && \
             pip install --no-cache-dir Cython && \
-            pip install --no-cache-dir https://github.com/lhelontra/tensorflow-on-arm/releases/download/v1.14.0-buster/tensorflow-1.14.0-cp37-none-linux_aarch64.whl && \
             pip install --no-cache-dir -r requirements.txt
