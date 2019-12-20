@@ -1,15 +1,17 @@
-FROM yinaoxiong/12306_code_server:amd64-env
+FROM python:3.7-slim-buster
 
 LABEL maintainer="Yin Aoxiong <yinaoxiong@gmail.com>" \
       reference="https://github.com/yinaoxiong/12306_code_server"
-
-ENV WORKERS 1
 
 WORKDIR /app
 
 COPY . .
 
-RUN set -ex && bash download_model.sh
+RUN set -ex && \
+            apt-get update && apt-get install -y wget && \
+            bash download_model.sh && \
+            rm -rf /var/lib/apt/lists/* && \
+            pip install --no-cache-dir -r requirements.txt
 
 # 服务运行在80端口
 EXPOSE 80
