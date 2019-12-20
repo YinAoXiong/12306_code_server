@@ -105,21 +105,19 @@ services:
    cd 12306_code_server
    ```
 
-2. 安装依赖
+2. 安装依赖 自行根据平台和python选择对应的tflite（下面的例子为amd64，python3.7）
 
    ```shell
-   pip3 install tensorflow==1.14.0
    pip3 install -r requirements.txt
    ```
 
 3. 下载模型文件
 
     ```shell
-    wget -c https://github.com/YinAoXiong/12306_code_server/releases/download/v0.1-alpha/12306.image.model.h5
-    wget -c https://github.com/YinAoXiong/12306_code_server/releases/download/v0.1-alpha/model.v2.0.h5
+    bash download_model.sh
     ```
 
-4. 运行
+4. 运行 默认workers为1，使用80端口，可以自行修改 gunicorn.conf
 
    ```shell
    gunicorn app:app -c gunicorn.conf.py
@@ -131,4 +129,4 @@ services:
 
 - [easy12306](https://github.com/zhaipro/easy12306) 提供项目运行的model
 -  [12306购票小助手](https://github.com/testerSunshine/12306)源于该项目的一个issue
-- [tensorflow-on-arm](https://github.com/lhelontra/tensorflow-on-arm)提供arm上运行的tensorflow python包
+- ~~[tensorflow-on-arm](https://github.com/lhelontra/tensorflow-on-arm)提供arm上运行的tensorflow python包~~ v1.1版本后开始使用tflite而非keras
