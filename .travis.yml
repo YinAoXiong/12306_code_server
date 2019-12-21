@@ -6,7 +6,13 @@ language: bash
 env:
   - IMAGE_NAME=12306_code_server DOCKER_CLI_EXPERIMENTAL=enabled
 
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 install:
+  - docker --version
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - chmod +x qemu/qemu-aarch64-static && chmod +x qemu/qemu-arm-static
