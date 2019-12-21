@@ -60,34 +60,20 @@
 
 使用docker可以使用如下命令快速部署:
 
-- amd64
 
   ```shell
   docker run -d -p 8080:80 --name 12306 yinaoxiong/12306_code_server
   ```
 
-- arm64v8
-
-  ```
-  docker run -d -p 8080:80 --name 12306 yinaoxiong/12306_code_server:arm64v8
-  ```
-
-- arm32v7
-
-  ```
-  docker run -d -p 8080:80 --name 12306 yinaoxiong/12306_code_server:arm32v7
-  ```
-
 ### docker-compose部署(推荐)
 
-amd64的docker-compose文件示例如下,其他平台可以自行修改
 
 ```yaml
 version: "3"
 
 services:
   code_12306:
-    image: yinaoxiong/12306_code_server:amd64 #根据需要修改image
+    image: yinaoxiong/12306_code_server
     ports:
       - 5002:80 #可以根据需要修改端口
     environment:
