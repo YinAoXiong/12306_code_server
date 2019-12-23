@@ -91,7 +91,7 @@ services:
    cd 12306_code_server
    ```
 
-2. 安装依赖 自行根据平台和python选择对应的tflite（下面的例子为amd64，python3.7）
+2. 安装依赖 自行根据平台和python选择对应的tflite（下面的例子为amd64，python3.7，其他情况对应的下载地址见 [https://www.tensorflow.org/lite/guide/python](https://www.tensorflow.org/lite/guide/python)，可自行在requirements.txt中替换）
 
    ```shell
    pip3 install -r requirements.txt
