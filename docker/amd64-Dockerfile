@@ -5,13 +5,18 @@ LABEL maintainer="Yin Aoxiong <yinaoxiong@gmail.com>" \
 
 WORKDIR /app
 
-COPY . .
-
 RUN set -ex && \
-            apt-get update && apt-get install -y wget && \
-            bash download_model.sh && \
-            rm -rf /var/lib/apt/lists/* && \
-            pip install --no-cache-dir -r requirements.txt
+            apt-get update && \
+            apt-get install -y wget && \
+            apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY download_model.sh ./
+RUN bash download_model.sh
+
+COPY . .
 
 # 服务运行在80端口
 EXPOSE 80
