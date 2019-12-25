@@ -3,6 +3,11 @@ sudo: required
 services:
   - docker
 language: bash
+
+branches:
+  only:
+  - master
+
 env:
   - IMAGE_NAME=12306_code_server DOCKER_CLI_EXPERIMENTAL=enabled
 
@@ -14,7 +19,6 @@ addons:
 install:
   - docker --version
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - chmod +x qemu/qemu-aarch64-static && chmod +x qemu/qemu-arm-static
 
 script:
@@ -32,13 +36,17 @@ script:
         docker tag $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH-$(git describe --abbrev=0 --tags)
       fi
     done
-    docker push $DOCKER_USERNAME/$IMAGE_NAME
-    docker manifest create $DOCKER_USERNAME/$IMAGE_NAME:latest $DOCKER_USERNAME/$IMAGE_NAME:amd64 $DOCKER_USERNAME/$IMAGE_NAME:arm32v7 $DOCKER_USERNAME/$IMAGE_NAME:arm64v8
-    docker manifest inspect $DOCKER_USERNAME/$IMAGE_NAME:latest
-    docker manifest push $DOCKER_USERNAME/$IMAGE_NAME:latest
-    if [ $COMMIT_SHA == $LATEST_TAG_SHA ]; then
-      TAG=$(git describe --abbrev=0 --tags)
-      docker manifest create $DOCKER_USERNAME/$IMAGE_NAME:$TAG $DOCKER_USERNAME/$IMAGE_NAME:amd64 $DOCKER_USERNAME/$IMAGE_NAME:arm32v7 $DOCKER_USERNAME/$IMAGE_NAME:arm64v8
-      docker manifest inspect $DOCKER_USERNAME/$IMAGE_NAME:$TAG
-      docker manifest push $DOCKER_USERNAME/$IMAGE_NAME:$TAG
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      docker push $DOCKER_USERNAME/$IMAGE_NAME
+      docker manifest create $DOCKER_USERNAME/$IMAGE_NAME:latest $DOCKER_USERNAME/$IMAGE_NAME:amd64 $DOCKER_USERNAME/$IMAGE_NAME:arm32v7 $DOCKER_USERNAME/$IMAGE_NAME:arm64v8
+      docker manifest inspect $DOCKER_USERNAME/$IMAGE_NAME:latest
+      docker manifest push $DOCKER_USERNAME/$IMAGE_NAME:latest
+      if [ $COMMIT_SHA == $LATEST_TAG_SHA ]; then
+        TAG=$(git describe --abbrev=0 --tags)
+        docker manifest create $DOCKER_USERNAME/$IMAGE_NAME:$TAG $DOCKER_USERNAME/$IMAGE_NAME:amd64 $DOCKER_USERNAME/$IMAGE_NAME:arm32v7 $DOCKER_USERNAME/$IMAGE_NAME:arm64v8
+        docker manifest inspect $DOCKER_USERNAME/$IMAGE_NAME:$TAG
+        docker manifest push $DOCKER_USERNAME/$IMAGE_NAME:$TAG
+      fi
     fi
