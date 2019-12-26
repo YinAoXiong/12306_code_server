@@ -3,7 +3,7 @@ import io
 import base64
 import flask
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFile
 from verify import pretreatment
 import tflite_runtime.interpreter as tflite
 
@@ -11,6 +11,8 @@ app = flask.Flask(__name__)
 # 模型的全局变量
 textModel = None
 imgModel = None
+# 设置加载截断的图片，解决issue #10
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 @app.before_first_request
