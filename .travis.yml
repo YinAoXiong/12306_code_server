@@ -23,21 +23,28 @@ install:
 
 script:
   - |
-    # A list of default architectures that will be built
+    # 构建docker镜像
     IMAGE_ARCH="amd64 arm32v7 arm64v8"
     COMMIT_SHA=$(git log -1 --pretty=format:"%H")
     LATEST_TAG_SHA=$(git rev-list --tags --max-count=1)
 
     for THIS_ARCH in ${IMAGE_ARCH}; do
-      # Build image
-      docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH \
+      docker build -t $IMAGE_NAME:$THIS_ARCH \
       -f docker/$THIS_ARCH-Dockerfile .
       if [ $COMMIT_SHA == $LATEST_TAG_SHA ]; then
-        docker tag $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH-$(git describe --abbrev=0 --tags)
+        docker tag $IMAGE_NAME:$THIS_ARCH $IMAGE_NAME:$THIS_ARCH-$(git describe --abbrev=0 --tags)
       fi
     done
-  - |
+    
+    # 推送镜像到docker hub
     if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+      for THIS_ARCH in ${IMAGE_ARCH}; do
+        #  标记镜像
+        docker tag $IMAGE_NAME:$THIS_ARCH $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH
+        if [ $COMMIT_SHA == $LATEST_TAG_SHA ]; then
+          docker tag $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH $DOCKER_USERNAME/$IMAGE_NAME:$THIS_ARCH-$(git describe --abbrev=0 --tags)
+        fi
+      done
       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       docker push $DOCKER_USERNAME/$IMAGE_NAME
       docker manifest create $DOCKER_USERNAME/$IMAGE_NAME:latest $DOCKER_USERNAME/$IMAGE_NAME:amd64 $DOCKER_USERNAME/$IMAGE_NAME:arm32v7 $DOCKER_USERNAME/$IMAGE_NAME:arm64v8
