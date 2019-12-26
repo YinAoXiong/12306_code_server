@@ -6,15 +6,20 @@ LABEL maintainer="Yin Aoxiong <yinaoxiong@gmail.com>" \
 WORKDIR /app
 
 COPY qemu/qemu-arm-static /usr/bin/qemu-arm-static
-COPY . .
 
 RUN set -ex && \
             apt-get update && \
             apt-get install -y libwebpdemux2 libzstd1 libopenjp2-7 libjbig0 libtiff5 liblcms2-2 libwebp6 libwebpmux3  \
             libatlas3-base libgfortran5 wget && \
-            rm -rf /var/lib/apt/lists/* && \
-            pip install --no-cache-dir --extra-index-url=https://www.piwheels.org/simple -r arm32v7-requirements.txt && \
-            bash download_model.sh
+            apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY arm32v7-requirements.txt ./
+RUN pip install --no-cache-dir --extra-index-url=https://www.piwheels.org/simple -r arm32v7-requirements.txt
+
+COPY download_model.sh ./
+RUN bash download_model.sh
+
+COPY . .
 
 # 服务运行在80端口
 EXPOSE 80
