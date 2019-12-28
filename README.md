@@ -102,6 +102,12 @@ services:
     ```shell
     bash download_model.sh
     ```
+    从GitHub下载慢的话可以选择执行下面的命令
+
+    ```shell
+    wget -c https://cdn.yinaoxiong.cn/models/image.model.tflite
+    wget -c https://cdn.yinaoxiong.cn/models/text.model.tflite
+    ```
 
 4. 运行 默认workers为1，使用80端口，可以自行修改 gunicorn.conf
 
