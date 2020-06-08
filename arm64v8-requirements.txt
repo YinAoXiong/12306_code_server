@@ -1,7 +1,7 @@
 flask==1.1.1
 gunicorn==19.9.0
 https://cdn.yinaoxiong.cn/wheels/numpy-1.17.4-cp37-cp37m-linux_aarch64.whl
-https://cdn.yinaoxiong.cn/wheels/Pillow-6.2.0-cp37-cp37m-linux_aarch64.whl
+https://cdn.yinaoxiong.cn/wheels/Pillow-7.1.2-cp37-cp37m-linux_aarch64.whl
 https://cdn.yinaoxiong.cn/wheels/greenlet-0.4.15-cp37-cp37m-linux_aarch64.whl
 https://cdn.yinaoxiong.cn/wheels/gevent-1.4.0-cp37-cp37m-linux_aarch64.whl
 https://dl.google.com/coral/python/tflite_runtime-1.14.0-cp37-cp37m-linux_aarch64.whl
