@@ -1,6 +1,7 @@
 # 12306验证码识别服务器
 
-[![Uptime Robot status](https://img.shields.io/uptimerobot/status/m783635180-ab3d4772f147c2a3b92f8fe5)](https://stats.uptimerobot.com/oyKyLhjJQ/783635180) [![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m783635180-ab3d4772f147c2a3b92f8fe5)](https://stats.uptimerobot.com/oyKyLhjJQ/783635180) [![Build Status](https://travis-ci.org/YinAoXiong/12306_code_server.svg?branch=master)](https://travis-ci.org/YinAoXiong/12306_code_server) [![Docker Pulls](https://img.shields.io/docker/pulls/yinaoxiong/12306_code_server)](https://hub.docker.com/r/yinaoxiong/12306_code_server)
+[![Uptime Robot status](https://img.shields.io/uptimerobot/status/m783635180-ab3d4772f147c2a3b92f8fe5)](https://stats.uptimerobot.com/oyKyLhjJQ/783635180) [![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m783635180-ab3d4772f147c2a3b92f8fe5)](https://stats.uptimerobot.com/oyKyLhjJQ/783635180) [![Build Status](https://travis-ci.org/YinAoXiong/12306_code_server.svg?branch=master)](https://travis-ci.org/YinAoXiong/12306_code_server) [![Docker Pulls](https://img.shields.io/docker/pulls/yinaoxiong/12306_code_server)](https://hub.docker.com/r/yinaoxiong/12306_code_server)[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FYinAoXiong%2F12306_code_server.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FYinAoXiong%2F12306_code_server?ref=badge_shield)
+
 
 该项目用于构建自托管的12306验证码识别服务器，本项目的全部模型和部分代码来自于此项目 [easy12306](https://github.com/zhaipro/easy12306)，使用该项目构建的api符合 [12306购票小助手](https://github.com/testerSunshine/12306)云打码格式可以直接调用。
 
@@ -122,3 +123,7 @@ services:
 - [easy12306](https://github.com/zhaipro/easy12306) 提供项目运行的model
 -  [12306购票小助手](https://github.com/testerSunshine/12306)源于该项目的一个issue
 - ~~[tensorflow-on-arm](https://github.com/lhelontra/tensorflow-on-arm)提供arm上运行的tensorflow python包~~ v1.1版本后开始使用tflite而非keras
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FYinAoXiong%2F12306_code_server.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FYinAoXiong%2F12306_code_server?ref=badge_large)
