@@ -2,5 +2,5 @@ flask==1.1.1
 Pillow>=6.2.2
 gunicorn==19.9.0
 gevent==1.4.0
-numpy==1.17.4
+numpy==1.22.0
 https://dl.google.com/coral/python/tflite_runtime-1.14.0-cp37-cp37m-linux_x86_64.whl
