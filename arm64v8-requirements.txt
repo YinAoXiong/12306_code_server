@@ -1,4 +1,4 @@
-flask==1.1.1
+flask==2.3.2
 gunicorn==19.9.0
 https://cdn.yinaoxiong.cn/wheels/numpy-1.17.4-cp37-cp37m-linux_aarch64.whl
 https://cdn.yinaoxiong.cn/wheels/Pillow-7.1.2-cp37-cp37m-linux_aarch64.whl
